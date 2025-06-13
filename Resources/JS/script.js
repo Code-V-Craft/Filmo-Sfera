@@ -14,7 +14,7 @@ async function loginUser() {
 
   try {
     // Wysłanie żądania logowania do backendu jako JSON z danymi logowania
-    const response = await fetch("/backend/api.php/api/login", {
+    const response = await fetch("/Filmo-sfera/backend/api.php/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ login, password }),
@@ -34,5 +34,6 @@ async function loginUser() {
     alert("Wystąpił błąd podczas logowania. Spróbuj ponownie później.");
   }
 }
+
 
 //#########################################################################################

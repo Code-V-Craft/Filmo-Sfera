@@ -1,6 +1,11 @@
 <?php
 
+// Ustawienie nagłówka odpowiedzi na JSON, aby klient wiedział, że otrzymuje dane w formacie JSON
+// Dokumentacja do nagłówków HTTP: https://www.php.net/manual/en/function.header.php
 header('Content-Type: application/json');
+
+
+ 
 
 session_start(); // Rozpoczęcie sesji, aby móc przechowywać dane sesji
 // Dokumentacja funkcji session_start: https://www.php.net/manual/en/function.session-start.php
@@ -51,11 +56,13 @@ $path = substr($requestUri, strlen($scriptName)); // wynik: /api/login
 // Dokumentacja substr: https://www.php.net/manual/en/function.substr.php
 // Dokumentacja strlen: https://www.php.net/manual/en/function.strlen.php
 
+
 // Routing switch-case
 switch ($path) {
     case '/api/login':
         // Sprawdzenie, czy żądanie jest typu POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
             // Odczytaj dane z żądania i przekonwertuj je z JSON na tablicę asocjacyjną
             $input = json_decode(file_get_contents('php://input'), true);
 
@@ -73,6 +80,10 @@ switch ($path) {
             if ($user && password_verify($password, $user['password'])) {
                 // Przypisanie wyniku działania funkcji generateToken do zmiennej $token
                 $token = generateToken($login);
+                $_SESSION['token'] = $token; // Zapisanie tokena w sesji
+                // Dokumentacja $_SESSION: https://www.php.net/manual/en/reserved.variables.session.php
+
+
                 // Ustawienie nagłówka odpowiedzi na 200 OK i zwrócenie tokena w formacie JSON
                 http_response_code(200);
                 echo json_encode([
@@ -89,6 +100,7 @@ switch ($path) {
             }
         }
         break;
+    
 
     // Dodaj kolejne endpointy tutaj, np.:
     /* <- rozpoczęcie komentarza wieloliniowego
